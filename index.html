@@ -61,40 +61,163 @@ button:hover {
 
 <script>
 const questionBank = [
-  {q:"Who is responsible for life safety during a non-fire emergency?", a:["Building Owner","FLSD","Fire Warden","Security Guard"], c:1},
-  {q:"Which is NOT a non-fire emergency?", a:["Gas leak","Power outage","Flooding","Kitchen fire"], c:3},
-  {q:"When should evacuation occur?", a:["After FDNY arrives","When occupants are in danger","Only during business hours","After tenant approval"], c:1},
-  {q:"Which system controls air movement?", a:["Sprinkler","HVAC","Standpipe","Fire alarm"], c:1},
-  {q:"Stairwells must be:", a:["Locked","Used for storage","Clear and unobstructed","Used by staff only"], c:2},
-  {q:"Elevators may be used when:", a:["Fire present","FDNY authorizes","Power failure","Never"], c:1},
-  {q:"Who assists disabled occupants?", a:["FDNY only","Assigned staff","Tenants","No one"], c:1},
-  {q:"Emergency Action Plans must include:", a:["Payroll","Evacuation procedures","Lease info","Maintenance logs"], c:1},
-  {q:"First action during gas leak:", a:["Ventilate","Evacuate and notify","Use elevators","Ignore"], c:1},
-  {q:"Emergency drills frequency:", a:["Daily","Weekly","As required","Never"], c:2},
-  {q:"Who communicates with FDNY?", a:["Tenants","FLSD","Janitor","Doorman"], c:1},
-  {q:"Flooding response includes:", a:["Using elevators","Securing electrical systems","Ignoring","Calling tenants"], c:1},
-  {q:"HVAC shutdown is used to:", a:["Cool building","Prevent smoke spread","Increase airflow","Save power"], c:1},
-  {q:"Egress lighting must operate during:", a:["Normal use","Power failure","Holidays","Maintenance"], c:1},
-  {q:"What is a muster point?", a:["Command center","Assembly area","Fire panel","Security desk"], c:1},
-  {q:"Which emergency requires FDNY notification?", a:["Minor spill","Gas leak","Broken chair","Noise complaint"], c:1},
-  {q:"Who conducts floor sweeps?", a:["FLSD","Wardens","Tenants","Maintenance"], c:1},
-  {q:"Blocked exits are:", a:["Allowed","Violation","Optional","Temporary"], c:1},
-  {q:"Emergency announcements use:", a:["Email","PA system","Posters","Text only"], c:1},
-  {q:"Power failure priority:", a:["Lights","Life safety systems","Computers","HVAC"], c:1},
-  {q:"Bomb threats require:", a:["Ignoring","Evacuation if credible","Immediate detonation","Tenant decision"], c:1},
-  {q:"Elevator entrapment requires:", a:["Self rescue","FDNY/maintenance","Force doors","Power reset"], c:1},
-  {q:"Command post location:", a:["Lobby","Outside building","Mechanical room","Roof"], c:0},
-  {q:"Emergency logs must be:", a:["Optional","Accurate","Destroyed","Private"], c:1},
-  {q:"Emergency signage must be:", a:["Decorative","Visible","Hidden","Optional"], c:1},
-  {q:"Who authorizes re-entry?", a:["Tenants","FLSD","FDNY","Security"], c:2},
-  {q:"Stair pressurization prevents:", a:["Fire","Smoke","Water","Noise"], c:1},
-  {q:"Non-fire drills test:", a:["Fire sprinklers","Procedures","Construction","Leases"], c:1},
-  {q:"Emergency radios are used for:", a:["Music","Communication","Recording","Internet"], c:1},
-  {q:"Emergency power supplies:", a:["Lights only","Life safety systems","Computers","HVAC only"], c:1},
-  {q:"Incident reports are completed:", a:["Never","After emergency","Before","Optional"], c:1},
-  {q:"Evacuation routes must be:", a:["Flexible","Posted","Secret","Locked"], c:1},
-  {q:"Non-fire emergencies include:", a:["Floods","Gas leaks","Power failures","All of the above"], c:3}
+  {
+    q: "Who has primary responsibility for life safety during a non-fire emergency?",
+    a: ["Building Owner", "Facility Life Safety Director", "Fire Warden", "Security Supervisor"],
+    c: 1
+  },
+  {
+    q: "Which of the following is NOT considered a non-fire emergency?",
+    a: ["Gas leak", "Power failure", "Flooding", "Uncontrolled fire"],
+    c: 3
+  },
+  {
+    q: "An evacuation shall be ordered when:",
+    a: [
+      "The Fire Department arrives",
+      "Conditions pose an immediate threat to occupant safety",
+      "Tenants request it",
+      "Normal business operations are interrupted"
+    ],
+    c: 1
+  },
+  {
+    q: "Which building system is primarily used to control the movement of smoke?",
+    a: ["Fire alarm system", "Standpipe system", "HVAC system", "Sprinkler system"],
+    c: 2
+  },
+  {
+    q: "Means of egress stairways shall be:",
+    a: [
+      "Locked during normal operations",
+      "Used for storage when not occupied",
+      "Maintained clear and unobstructed at all times",
+      "Accessible only to building staff"
+    ],
+    c: 2
+  },
+  {
+    q: "Elevators may be used during a non-fire evacuation ONLY when:",
+    a: [
+      "The power is restored",
+      "Authorized by the Fire Department",
+      "Stairways are crowded",
+      "The building is fully occupied"
+    ],
+    c: 1
+  },
+  {
+    q: "Who is responsible for assisting persons requiring assistance during an emergency?",
+    a: [
+      "Fire Department personnel only",
+      "Assigned building staff",
+      "Other tenants",
+      "Maintenance personnel only"
+    ],
+    c: 1
+  },
+  {
+    q: "An Emergency Action Plan shall include:",
+    a: [
+      "Tenant lease information",
+      "Evacuation procedures",
+      "Maintenance schedules",
+      "Payroll records"
+    ],
+    c: 1
+  },
+  {
+    q: "What is the FIRST action to be taken upon discovery of a gas leak?",
+    a: [
+      "Attempt to ventilate the area",
+      "Evacuate the affected area and notify appropriate authorities",
+      "Use elevators to exit",
+      "Shut down the fire alarm system"
+    ],
+    c: 1
+  },
+  {
+    q: "Emergency drills shall be conducted:",
+    a: [
+      "Daily",
+      "Weekly",
+      "As required by FDNY rules",
+      "At the discretion of tenants"
+    ],
+    c: 2
+  },
+  {
+    q: "Who is responsible for communicating with responding emergency units?",
+    a: ["Security staff", "Facility Life Safety Director", "Tenants", "Maintenance staff"],
+    c: 1
+  },
+  {
+    q: "During flooding conditions, the FLSD shall ensure:",
+    a: [
+      "Elevators remain in service",
+      "Electrical systems are protected",
+      "Normal operations continue",
+      "Tenants handle the situation"
+    ],
+    c: 1
+  },
+  {
+    q: "HVAC systems may be shut down to:",
+    a: [
+      "Improve comfort",
+      "Prevent the spread of smoke or contaminants",
+      "Reduce energy consumption",
+      "Assist maintenance operations"
+    ],
+    c: 1
+  },
+  {
+    q: "Emergency lighting shall operate:",
+    a: [
+      "Only during fire emergencies",
+      "During loss of normal power",
+      "Only when manually activated",
+      "During business hours only"
+    ],
+    c: 1
+  },
+  {
+    q: "A designated assembly area is also known as:",
+    a: ["Command post", "Muster point", "Fire control room", "Security desk"],
+    c: 1
+  },
+  {
+    q: "Which condition requires immediate notification of the Fire Department?",
+    a: ["Minor water leak", "Gas leak", "Broken fixture", "Noise complaint"],
+    c: 1
+  },
+  {
+    q: "Floor searches during an evacuation are conducted by:",
+    a: ["Facility Life Safety Director", "Floor Wardens", "Tenants", "Maintenance staff"],
+    c: 1
+  },
+  {
+    q: "Blocked or obstructed exits are considered:",
+    a: ["Acceptable temporarily", "A violation", "Optional", "Permitted after hours"],
+    c: 1
+  },
+  {
+    q: "Emergency announcements to occupants should be made using:",
+    a: ["Email only", "Public address system", "Posted notices", "Text messages only"],
+    c: 1
+  },
+  {
+    q: "During a power failure, priority shall be given to:",
+    a: ["Office equipment", "Life safety systems", "HVAC systems", "Tenant spaces"],
+    c: 1
+  },
+  {
+    q: "Re-entry into a building after an emergency shall be authorized by:",
+    a: ["Tenants", "Facility Life Safety Director", "Fire Department", "Security staff"],
+    c: 2
+  }
 ];
+
 
 let selectedQuestions = [];
 
