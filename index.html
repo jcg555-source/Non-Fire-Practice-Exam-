@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Non-Fire FLSD Practice Test</title>
+
 <style>
 body {
   font-family: Arial, sans-serif;
@@ -47,119 +48,137 @@ button:hover {
   font-weight: bold;
   text-align: center;
 }
+.section-buttons {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.section-buttons button {
+  margin: 5px;
+}
 </style>
 </head>
 
 <body>
 <div class="container">
+
 <h1>Non-Fire FLSD Practice Test</h1>
-<div style="text-align:center;margin-bottom:20px;">
+
+<div class="section-buttons">
   <button onclick="startSection('section1')">CBR / Terrorism</button>
   <button onclick="startSection('section2')">Active Shooter</button>
   <button onclick="startSection('section3')">Natural Disasters</button>
   <button onclick="startFullExam()" style="background:#444;">Full Exam (75)</button>
 </div>
+
 <div id="quiz"></div>
-<button onclick="submitQuiz()">Submit Exam</button>
-<button onclick="loadQuiz()" style="margin-left:10px;background:#444;">New Test</button>
+
+<div style="text-align:center;">
+  <button onclick="submitQuiz()">Submit Exam</button>
+  <button onclick="startSection(currentSection || 'section1')" style="background:#444;margin-left:10px;">
+    New Test
+  </button>
+</div>
+
 <div id="result"></div>
+
 </div>
 
 <script>
+/* ================= QUESTION BANK ================= */
+
 const questionBank = {
   section1: {
-    title: "CBR (Chemical, Biological, Radiological) & Terrorism Awareness",
     questions: [
-      { q: "CBR stands for:", a: ["Civil, Building, Response","Chemical, Biological, Radiological","Chemical, Bomb, Radiation","City, Borough, Response"], c: 1 },
-      { q: "Chemical agents typically cause effects that are immediate.", a: ["True","False"], c: 0 },
-      { q: "Biological agents typically have delayed effects.", a: ["True","False"], c: 0 },
-      { q: "Radiological incidents primarily cause harm through radiation exposure.", a: ["True","False"], c: 0 },
-      { q: "A dirty bomb is best described as:", a: ["Nuclear weapon","Pipe bomb with radioactive material","Chemical gas device","Biological dispersal device"], c: 1 },
-      { q: "Natural gas is lighter than air.", a: ["True","False"], c: 0 },
-      { q: "Which characteristic is MOST associated with chemical agents?", a: ["Delayed illness","Immediate symptoms","No odor","Long incubation"], c: 1 },
-      { q: "Biological agents can be tasteless and odorless.", a: ["True","False"], c: 0 },
-      { q: "Radiological exposure may not cause immediate symptoms.", a: ["True","False"], c: 0 },
-      { q: "Medical attention should be sought immediately after any suspected CBR exposure.", a: ["True","False"], c: 0 },
-      { q: "HVAC systems may be shut down during a CBR incident to:", a: ["Save energy","Prevent spread of contaminants","Increase airflow","Improve comfort"], c: 1 },
-      { q: "Which organization provides private sector threat outreach?", a: ["FDNY","NYPD SHIELD","OEM","DOB"], c: 1 },
-      { q: "Radiological devices cause long-term area contamination.", a: ["True","False"], c: 0 },
-      { q: "Which is NOT a CBR agent?", a: ["Anthrax","Sarin","Cesium","Natural gas"], c: 3 },
-      { q: "FDNY response actions are categorized as:", a: ["Mandatory/Optional","Safe/Unsafe","Recommended/Acceptable/Unacceptable","Evacuate/Shelter"], c: 2 },
-      { q: "Self-evacuation without direction during CBR is unacceptable.", a: ["True","False"], c: 0 },
-      { q: "Biological exposure is often identified through medical diagnosis over time.", a: ["True","False"], c: 0 },
-      { q: "Radiological exposure primarily causes burns.", a: ["True","False"], c: 1 },
-      { q: "Chemical agents often affect the respiratory system.", a: ["True","False"], c: 0 },
-      { q: "CBR incidents may require shelter-in-place.", a: ["True","False"], c: 0 },
-      { q: "Which is a radiological hazard?", a: ["Smoke","Blast","Radiation","Heat"], c: 2 },
-      { q: "Delayed symptoms are MOST associated with:", a: ["Chemical","Biological","Explosive","Fire"], c: 1 },
-      { q: "CBR coordination includes emergency responders.", a: ["True","False"], c: 0 },
-      { q: "Chemical releases are always visible.", a: ["True","False"], c: 1 },
-      { q: "Life safety is the top priority during CBR incidents.", a: ["True","False"], c: 0 }
+      { q:"CBR stands for:", a:["Civil, Building, Response","Chemical, Biological, Radiological","Chemical, Bomb, Radiation","City, Borough, Response"], c:1 },
+      { q:"Chemical agents typically cause immediate effects.", a:["True","False"], c:0 },
+      { q:"Biological agents typically have delayed effects.", a:["True","False"], c:0 },
+      { q:"Radiological incidents primarily cause harm through radiation exposure.", a:["True","False"], c:0 },
+      { q:"A dirty bomb is best described as:", a:["Nuclear weapon","Pipe bomb with radioactive material","Chemical gas device","Biological dispersal device"], c:1 },
+      { q:"Natural gas is lighter than air.", a:["True","False"], c:0 },
+      { q:"Chemical agents most often cause:", a:["Delayed illness","Immediate symptoms","Long incubation","No odor"], c:1 },
+      { q:"Biological agents can be tasteless and odorless.", a:["True","False"], c:0 },
+      { q:"Radiological exposure may not cause immediate symptoms.", a:["True","False"], c:0 },
+      { q:"Medical attention should be sought after any suspected CBR exposure.", a:["True","False"], c:0 },
+      { q:"HVAC may be shut down to prevent spread of contaminants.", a:["True","False"], c:0 },
+      { q:"Private sector threat outreach is provided by:", a:["FDNY","NYPD SHIELD","OEM","DOB"], c:1 },
+      { q:"Radiological devices cause long-term contamination.", a:["True","False"], c:0 },
+      { q:"Which is NOT a CBR agent?", a:["Anthrax","Sarin","Cesium","Natural gas"], c:3 },
+      { q:"FDNY response categories include:", a:["Mandatory/Optional","Recommended/Acceptable/Unacceptable","Safe/Unsafe","Evacuate/Shelter"], c:1 },
+      { q:"Self-evacuation without direction during CBR is unacceptable.", a:["True","False"], c:0 },
+      { q:"Biological exposure is often detected over time.", a:["True","False"], c:0 },
+      { q:"Radiological exposure primarily causes burns.", a:["True","False"], c:1 },
+      { q:"Chemical agents often affect breathing.", a:["True","False"], c:0 },
+      { q:"Shelter-in-place may be required during CBR events.", a:["True","False"], c:0 },
+      { q:"Radiation is the primary hazard in radiological incidents.", a:["True","False"], c:0 },
+      { q:"Delayed symptoms suggest a biological agent.", a:["True","False"], c:0 },
+      { q:"CBR response requires coordination with responders.", a:["True","False"], c:0 },
+      { q:"Chemical releases are always visible.", a:["True","False"], c:1 },
+      { q:"Life safety is the top priority.", a:["True","False"], c:0 }
     ]
   },
 
   section2: {
-    title: "Active Shooter & Security Threats",
     questions: [
-      { q: "ABC protocol stands for:", a: ["Avoid, Barricade, Confront","Alert, Block, Communicate","Assess, Bypass, Contain","Announce, Block, Control"], c: 0 },
-      { q: "Occupants must be trained to call 911 immediately during an active shooter.", a: ["True","False"], c: 0 },
-      { q: "The location where the threat is occurring is called the:", a: ["Safe Zone","Affected Area","Command Post","Assembly Area"], c: 1 },
-      { q: "A manual pull station should be pulled during an active shooter.", a: ["True","False"], c: 1 },
-      { q: "Manual pull stations are used ONLY for smoke or fire conditions.", a: ["True","False"], c: 0 },
-      { q: "FLSD makes decisions during fire emergencies or if shooter is outside.", a: ["True","False"], c: 0 },
-      { q: "If the active shooter is outside, fail-safe doors should be released.", a: ["True","False"], c: 0 },
-      { q: "If the active shooter is inside, fail-safe doors should not be released.", a: ["True","False"], c: 0 },
-      { q: "Active shooter incidents are primarily law enforcement events.", a: ["True","False"], c: 0 },
-      { q: "Law enforcement becomes Incident Commander during active shooter events.", a: ["True","False"], c: 0 },
-      { q: "Which is a recommended action?", a: ["Pull fire alarm","Barricade and silence phones","Gather in lobby","Confront immediately"], c: 1 },
-      { q: "Which is unacceptable behavior?", a: ["Calling 911","Following NYPD instructions","Self-deploying to threat","Barricading"], c: 2 },
-      { q: "A first responder kit should include:", a: ["BIC","Floor plans","Keys/access cards","All of the above"], c: 3 },
-      { q: "Tenant rent rolls should be in a first responder kit.", a: ["True","False"], c: 1 },
-      { q: "Communication should be clear and concise.", a: ["True","False"], c: 0 },
-      { q: "Affected areas should be avoided.", a: ["True","False"], c: 0 },
-      { q: "Re-entry after an active shooter is authorized by:", a: ["FLSD","Tenants","Law Enforcement","Security"], c: 2 },
-      { q: "Elevators should be used during active shooter evacuations.", a: ["True","False"], c: 1 },
-      { q: "Civil disturbances require staff awareness.", a: ["True","False"], c: 0 },
-      { q: "Partial evacuation may be appropriate.", a: ["True","False"], c: 0 },
-      { q: "Speculative information should be shared.", a: ["True","False"], c: 1 },
-      { q: "ABC protocol applies to active shooter incidents.", a: ["True","False"], c: 0 },
-      { q: "FLSD should confront the shooter.", a: ["True","False"], c: 1 },
-      { q: "NYPD SHIELD focuses on threat awareness.", a: ["True","False"], c: 0 },
-      { q: "Life safety is the priority during security threats.", a: ["True","False"], c: 0 }
+      { q:"ABC protocol stands for:", a:["Avoid, Barricade, Confront","Alert, Block, Communicate","Assess, Bypass, Contain","Announce, Block, Control"], c:0 },
+      { q:"Occupants must call 911 immediately during an active shooter.", a:["True","False"], c:0 },
+      { q:"The threat location is known as the:", a:["Safe Zone","Affected Area","Command Post","Assembly Area"], c:1 },
+      { q:"Manual pull stations should be activated during active shooter incidents.", a:["True","False"], c:1 },
+      { q:"Pull stations are ONLY for smoke or fire.", a:["True","False"], c:0 },
+      { q:"FLSD makes decisions during fires or if shooter is outside.", a:["True","False"], c:0 },
+      { q:"If shooter is outside, fail-safe doors should be released.", a:["True","False"], c:0 },
+      { q:"If shooter is inside, fail-safe doors should NOT be released.", a:["True","False"], c:0 },
+      { q:"Active shooter incidents are law enforcement events.", a:["True","False"], c:0 },
+      { q:"Law enforcement is Incident Commander during active shooter.", a:["True","False"], c:0 },
+      { q:"Recommended action includes:", a:["Pull fire alarm","Barricade and silence phones","Gather in lobby","Confront shooter"], c:1 },
+      { q:"Which is unacceptable?", a:["Calling 911","Following NYPD orders","Self-deploying","Barricading"], c:2 },
+      { q:"A first responder kit includes:", a:["BIC","Floor plans","Keys","All of the above"], c:3 },
+      { q:"Tenant rent rolls belong in a responder kit.", a:["True","False"], c:1 },
+      { q:"Communication should be clear and concise.", a:["True","False"], c:0 },
+      { q:"Affected areas should be avoided.", a:["True","False"], c:0 },
+      { q:"Re-entry is authorized by:", a:["FLSD","Tenants","Law Enforcement","Security"], c:2 },
+      { q:"Elevators should be used during active shooter evacuations.", a:["True","False"], c:1 },
+      { q:"Civil disturbances require staff awareness.", a:["True","False"], c:0 },
+      { q:"Partial evacuation may be appropriate.", a:["True","False"], c:0 },
+      { q:"Speculative information should be shared.", a:["True","False"], c:1 },
+      { q:"ABC applies to active shooter incidents.", a:["True","False"], c:0 },
+      { q:"FLSD should confront the shooter.", a:["True","False"], c:1 },
+      { q:"NYPD SHIELD focuses on threat awareness.", a:["True","False"], c:0 },
+      { q:"Life safety is the priority.", a:["True","False"], c:0 }
     ]
   },
 
   section3: {
-    title: "Natural Disasters, Utilities & Command Systems",
     questions: [
-      { q: "TIPS stands for:", a: ["Total, In-Place, Safe","Total Evacuation, In-Building Relocation, Partial Evacuation, Shelter-In-Place","Temporary Incident Protection System","Tactical Incident Plan"], c: 1 },
-      { q: "Gas leaks require full evacuation.", a: ["True","False"], c: 0 },
-      { q: "If gas odor is faint, open windows.", a: ["True","False"], c: 0 },
-      { q: "If gas odor is strong, leave immediately.", a: ["True","False"], c: 0 },
-      { q: "Small water main breaks should be reported to 311.", a: ["True","False"], c: 0 },
-      { q: "Major water main breaks require calling 911.", a: ["True","False"], c: 0 },
-      { q: "Hurricane winds are stronger at higher elevations.", a: ["True","False"], c: 0 },
-      { q: "Hurricanes are categorized from 1 to 5.", a: ["True","False"], c: 0 },
-      { q: "Underground equipment should be protected.", a: ["True","False"], c: 0 },
-      { q: "During natural disasters avoid windows and perimeter walls.", a: ["True","False"], c: 0 },
-      { q: "CIMS defines roles during citywide emergencies.", a: ["True","False"], c: 0 },
-      { q: "There are three types of incident command.", a: ["True","False"], c: 0 },
-      { q: "Single Command involves one responding agency.", a: ["True","False"], c: 0 },
-      { q: "Unified Command involves multiple agencies.", a: ["True","False"], c: 0 },
-      { q: "FDNY is Incident Commander during fires.", a: ["True","False"], c: 0 },
-      { q: "Bomb threats always require immediate evacuation.", a: ["True","False"], c: 1 },
-      { q: "Natural disasters are non-fire emergencies.", a: ["True","False"], c: 0 },
-      { q: "Occupants should be informed during emergencies.", a: ["True","False"], c: 0 },
-      { q: "Partial evacuation affects only impacted areas.", a: ["True","False"], c: 0 },
-      { q: "Shelter-in-place may be appropriate during external chemical releases.", a: ["True","False"], c: 0 },
-      { q: "Utility failures are non-fire emergencies.", a: ["True","False"], c: 0 },
-      { q: "Life safety is the primary goal.", a: ["True","False"], c: 0 },
-      { q: "FLSD must communicate with emergency responders.", a: ["True","False"], c: 0 },
-      { q: "Windows are safe locations during hurricanes.", a: ["True","False"], c: 1 },
-      { q: "Documentation is more important than life safety.", a: ["True","False"], c: 1 }
+      { q:"TIPS stands for:", a:["Total, In-Place, Safe","Total Evacuation, In-Building Relocation, Partial Evacuation, Shelter-In-Place","Temporary Incident Protection System","Tactical Incident Plan"], c:1 },
+      { q:"Gas leaks require full evacuation.", a:["True","False"], c:0 },
+      { q:"If gas odor is faint, open windows.", a:["True","False"], c:0 },
+      { q:"If gas odor is strong, leave immediately.", a:["True","False"], c:0 },
+      { q:"Small water main breaks should be reported to 311.", a:["True","False"], c:0 },
+      { q:"Major water main breaks require calling 911.", a:["True","False"], c:0 },
+      { q:"Hurricane winds are stronger at higher elevations.", a:["True","False"], c:0 },
+      { q:"Hurricanes are categorized from 1–5.", a:["True","False"], c:0 },
+      { q:"Equipment below grade should be protected.", a:["True","False"], c:0 },
+      { q:"Avoid windows and perimeter walls during disasters.", a:["True","False"], c:0 },
+      { q:"CIMS defines emergency roles.", a:["True","False"], c:0 },
+      { q:"There are three types of incident command.", a:["True","False"], c:0 },
+      { q:"Single Command involves one agency.", a:["True","False"], c:0 },
+      { q:"Unified Command involves multiple agencies.", a:["True","False"], c:0 },
+      { q:"FDNY is Incident Commander during fires.", a:["True","False"], c:0 },
+      { q:"Bomb threats always require evacuation.", a:["True","False"], c:1 },
+      { q:"Natural disasters are non-fire emergencies.", a:["True","False"], c:0 },
+      { q:"Occupants should be informed during emergencies.", a:["True","False"], c:0 },
+      { q:"Partial evacuation affects only impacted areas.", a:["True","False"], c:0 },
+      { q:"Shelter-in-place may be appropriate during external chemical releases.", a:["True","False"], c:0 },
+      { q:"Utility failures are non-fire emergencies.", a:["True","False"], c:0 },
+      { q:"Life safety is the primary goal.", a:["True","False"], c:0 },
+      { q:"FLSD must communicate with responders.", a:["True","False"], c:0 },
+      { q:"Windows are safe during hurricanes.", a:["True","False"], c:1 },
+      { q:"Documentation is more important than life safety.", a:["True","False"], c:1 }
     ]
   }
 };
+
+/* ================= LOGIC ================= */
 
 let selectedQuestions = [];
 let currentSection = "";
@@ -171,68 +190,54 @@ function startSection(sectionKey) {
 
 function startFullExam() {
   currentSection = "full";
-  const all = [
-    ...questionBank.section1.questions,
-    ...questionBank.section2.questions,
-    ...questionBank.section3.questions
-  ];
-  loadQuestions(all, 75);
+  loadQuestions(
+    [
+      ...questionBank.section1.questions,
+      ...questionBank.section2.questions,
+      ...questionBank.section3.questions
+    ],
+    75
+  );
 }
 
 function loadQuestions(pool, count) {
   document.getElementById("result").innerHTML = "";
-  selectedQuestions = [...pool]
-    .sort(() => 0.5 - Math.random())
-    .slice(0, count);
+  selectedQuestions = [...pool].sort(() => 0.5 - Math.random()).slice(0, count);
 
-  const quizDiv = document.getElementById("quiz");
-  quizDiv.innerHTML = "";
+  const quiz = document.getElementById("quiz");
+  quiz.innerHTML = "";
 
   selectedQuestions.forEach((q, i) => {
-    const shuffled = [...q.a].sort(() => 0.5 - Math.random());
-    q._shuffled = shuffled;
-
-    const div = document.createElement("div");
-    div.className = "question";
-    div.innerHTML = `<strong>${i + 1}. ${q.q}</strong>`;
-
-    const ansDiv = document.createElement("div");
-    ansDiv.className = "answers";
-
-    shuffled.forEach(choice => {
-      ansDiv.innerHTML += `
-        <label>
-          <input type="radio" name="q${i}" value="${choice}">
-          ${choice}
-        </label>`;
-    });
-
-    div.appendChild(ansDiv);
-    quizDiv.appendChild(div);
+    const answers = [...q.a].sort(() => 0.5 - Math.random());
+    quiz.innerHTML += `
+      <div class="question">
+        <strong>${i + 1}. ${q.q}</strong>
+        ${answers.map(a => `
+          <label>
+            <input type="radio" name="q${i}" value="${a}">
+            ${a}
+          </label>
+        `).join("")}
+      </div>
+    `;
   });
 }
 
 function submitQuiz() {
   let score = 0;
-
   selectedQuestions.forEach((q, i) => {
-    const selected = document.querySelector(`input[name="q${i}"]:checked`);
-    if (selected && selected.value === q.a[q.c]) {
-      score++;
-    }
+    const sel = document.querySelector(`input[name="q${i}"]:checked`);
+    if (sel && sel.value === q.a[q.c]) score++;
   });
 
-  const total = selectedQuestions.length;
-  const percent = Math.round((score / total) * 100);
-  const pass = percent >= 70 ? "PASS" : "FAIL";
-
+  const percent = Math.round((score / selectedQuestions.length) * 100);
   document.getElementById("result").innerHTML =
-    `Score: ${score} / ${total} (${percent}%) – <strong>${pass}</strong>`;
+    `Score: ${score} / ${selectedQuestions.length} (${percent}%) — <strong>${percent >= 70 ? "PASS" : "FAIL"}</strong>`;
 }
+
+/* Auto-load first section */
 startSection("section1");
 </script>
 
-loadQuiz();
-</script>
 </body>
 </html>
