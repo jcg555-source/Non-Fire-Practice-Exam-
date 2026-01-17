@@ -233,16 +233,45 @@ function loadQuestions(pool, count) {
 
 function submitQuiz() {
   let score = 0;
+  const resultDiv = document.getElementById("result");
+  resultDiv.innerHTML = ""; // clear previous results
+
+  let wrongQuestions = []; // array to store wrong answers
+
   selectedQuestions.forEach((q, i) => {
-    const sel = document.querySelector(`input[name="q${i}"]:checked`);
-    if (sel && sel.value === q.a[q.c]) score++;
+    const selected = document.querySelector(`input[name="q${i}"]:checked`);
+    if (selected && selected.value === q.a[q.c]) {
+      score++;
+    } else {
+      wrongQuestions.push({
+        q: q.q,
+        yourAnswer: selected ? selected.value : "No answer",
+        correctAnswer: q.a[q.c]
+      });
+    }
   });
 
-  const percent = Math.round((score / selectedQuestions.length) * 100);
-  document.getElementById("result").innerHTML =
-    `Score: ${score} / ${selectedQuestions.length} (${percent}%) — <strong>${percent >= 70 ? "PASS" : "FAIL"}</strong>`;
-}
+  const total = selectedQuestions.length;
+  const percent = Math.round((score / total) * 100);
+  const pass = percent >= 70 ? "PASS" : "FAIL";
 
+  // Display main score
+  resultDiv.innerHTML = `<p>Score: ${score} / ${total} (${percent}%) – <strong>${pass}</strong></p>`;
+
+  // Display wrong answers
+  if (wrongQuestions.length > 0) {
+    const list = document.createElement("div");
+    list.innerHTML = `<h3>Questions Answered Incorrectly:</h3>`;
+    wrongQuestions.forEach(item => {
+      const p = document.createElement("p");
+      p.innerHTML = `<strong>Q:</strong> ${item.q}<br>
+                     <strong>Your answer:</strong> ${item.yourAnswer}<br>
+                     <strong>Correct answer:</strong> ${item.correctAnswer}`;
+      list.appendChild(p);
+    });
+    resultDiv.appendChild(list);
+  }
+}
 /* Auto-load first section */
 startSection("section1");
 </script>
